@@ -5,12 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="css/tic_tac_toe.css" type="text/css">
+    <link rel="stylesheet" href="tictacto.css" type="text/css">
+    <script src="tictactoe.js" defer></script>
 </head>
 <body>
-    <h1>Tic Tac Toe</h1>  
-    <div class="forMobile">asdfg</div>  
-    <div class="board" id="board">
+    <!-- Header -->
+    <h1><span class="head">Tic</span> <span class="head">Tac</span> <span class="head">Toe</span></h1>
+    <div class="forMobile"></div>
+
+    <!-- Main Board -->
+    <div class="board">
         <div class="cell" data-cell></div>
         <div class="cell" data-cell></div>
         <div class="cell" data-cell></div>
@@ -22,11 +26,11 @@
         <div class="cell" data-cell></div>
     </div>
 
+    <!-- Winning Content -->
     <div class="winning-message" id="winningMessage">
-        <div data-winning-msg></div>
-        <button id="restartButton">Restart</button>
+        <div class="winning-msg-txt"></div>
+        <button id="restart">Restart</button>
     </div>
-    <!-- SCRIPT -->
-    <script src="js/tic_tac_toe.js"></script>
+
 </body>
 </html>
