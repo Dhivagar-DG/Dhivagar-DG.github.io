@@ -1,85 +1,105 @@
-const X_PLAYER = "x";
-const CIRCLE_PLAYER = "o";
-const combinations = [
-    [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
-];
-const board = document.getElementById("board");
-const cells = document.querySelectorAll("[data-cell]");
+// GLOBAL REFERENCE VARIABLE
+const board = document.querySelector('.board');
+const cells = document.querySelectorAll('[data-cell]');
 const winningMessage = document.getElementById("winningMessage");
-const winningMessageTxt = document.querySelector("[data-winning-msg]");
-const restartBtn = document.getElementById("restartButton");
-const indicatorForMbl = document.querySelector(".forMobile");
+const winningMsgTxt = document.querySelector('.winning-msg-txt');
+const restartBtn = document.querySelector('#restart');
+const indicatorForMbl = document.querySelector('.forMobile');
 
-let circleTurn = false;
+// Players Variable
+const X_PLAYER = "x";
+const O_PLAYER = "o";
 
+// Winning Combinations Variable
+const combinations = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+];
 
-// LET'S GAME START
-stratGame();
+let currentTurn = false;
 
-
-// START GAME
-function stratGame(){
-    board.classList.add(X_PLAYER);
-    circleTurn = false;
-    indicatorForMbl.textContent = `${X_PLAYER}`.toLocaleUpperCase();
+// Game Start function
+function gameStart(){
+    currentTurn = false;
+    addBoardClass();
+    winningMessage.style.display = "none";
     cells.forEach(cell=>{
-        cell.classList.remove(X_PLAYER)
-        cell.classList.remove(CIRCLE_PLAYER);
+        cell.classList.remove(X_PLAYER);
+        cell.classList.remove(O_PLAYER);
         cell.removeEventListener('click', handleClick);
-        cell.addEventListener('click', handleClick, {once : true});
+        cell.addEventListener('click', handleClick, {once : true });
     });
-    winningMessage.classList.remove("show")
 }
 
 
-
-// Restart Game
-restartBtn.addEventListener('click', stratGame);
-
+//Game Restart
+restartBtn.addEventListener('click', gameStart); 
 
 
-// Handle CLick Function
+// Game End Function
+function gameEnd(win, currentPlayer){
+    winningMsgTxt.textContent = win ? `${currentPlayer.toLocaleUpperCase()} player win.` : `Match Draw.`;
+    winningMessage.style.display ="flex";
+} 
+
+
+// Handle Click Function
 function handleClick(event){
-    const cell = event.target;
-    let currentPlayer = circleTurn ? CIRCLE_PLAYER : X_PLAYER;
-    cell.classList.add(currentPlayer);
-    if(checkWin(currentPlayer)){
-        endGame(false, currentPlayer);
+    let currentDiv  = event.target;
+    let currentPlayer = currentTurn ? O_PLAYER : X_PLAYER;
+    currentDiv.classList.add(currentPlayer);
+
+    if (isWin(currentPlayer)){
+        gameEnd(true, currentPlayer);
     }else if( isDarw()){
-        endGame(true);
+        gameEnd(false);
     }else{
-        circleTurn = !circleTurn;
-        board.classList.remove(X_PLAYER);
-        board.classList.remove(CIRCLE_PLAYER);
-        board.classList.add(circleTurn ? CIRCLE_PLAYER : X_PLAYER);
-        indicatorForMbl.textContent = circleTurn ? CIRCLE_PLAYER.toLocaleUpperCase() : X_PLAYER.toLocaleUpperCase();
+        currentTurn = !currentTurn;
+        addBoardClass();
     }
 }
 
 
-// EndGame
-function endGame( isDraw , currentPlayer){
-    if (isDraw)
-        winningMessageTxt.textContent = "Match Draw";
-    else
-        winningMessageTxt.textContent = `${currentPlayer.toUpperCase()} player win.`;
-    
-    winningMessage.classList.add("show"); 
-
+// Add Board Class Display Currentplayer In Cells
+let addBoardClass = ()=>{
+    let currentPlayer = currentTurn ? O_PLAYER : X_PLAYER;
+    board.classList.remove(X_PLAYER);
+    board.classList.remove(O_PLAYER);
+    board.classList.add(currentPlayer);
+    indicatorForMbl.textContent = currentPlayer.toLocaleUpperCase();
+    if (currentPlayer == O_PLAYER){
+        indicatorForMbl.style.background = "#EEECEC";
+        indicatorForMbl.style.color = "orangered";
+    }else{
+        indicatorForMbl.style.background = "orangered";
+        indicatorForMbl.style.color = "#EEECEC"; 
+    }
 }
 
+
 // Check Win
-function checkWin(currentPlayer){
-    return combinations.some((combination)=>{
-        return combination.every((indexValue)=>{
-            return cells[indexValue].classList.contains(currentPlayer);
+function isWin(currentPlayer){
+    return combinations.some(combination=>{
+        return combination.every(idx=>{
+            return cells[idx].classList.contains(currentPlayer);
         });
     });
 }
 
 
-// Check Draw
+// Check Draw 
 function isDarw(){
-    return [...cells].every(cell=>
-        cell.classList.contains(X_PLAYER) || cell.classList.contains(CIRCLE_PLAYER));
+    return [...cells].every(cell=>{
+        return cell.classList.contains(X_PLAYER) ||
+                cell.classList.contains(O_PLAYER);
+    });
 }
+
+// setInterval(()=>{
+//     let headingList = document.querySelectorAll('.head');
+//     ['orangered','blueviolet','yellowgreen'].forEach(color,)
+// });
+
+// Let's game start
+gameStart();
