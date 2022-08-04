@@ -1,47 +1,59 @@
 *,
-*::after,
-*::before{
-   box-sizing: border-box; 
+*::before,*::after{
+    box-sizing: border-box;
 }
-
 :root{
-    --cell-size : 100px;
-    --mark-size : calc(var(--cell-size) * .9)
+    --cell-size:100px;
+    --mark-size: calc(var(--cell-size) * .9);
 }
 body{
     margin: 0;
+    padding: 0;
     background: lightblue;
 }
 h1{
     position: absolute;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
+span:first-child{
+    color: orangered;
+}
+span:nth-child(2){
+    color: blueviolet;
+}
+span:last-child{
+    color: yellowgreen;
+}
+/* Main Board */
 .board{
-    width: 100vw;
+    width: 100wv;
     height: 100vh;
+    cursor: pointer;
     display: grid;
     justify-content: center;
     align-items: center;
     justify-items: center;
     align-content: center;
-    position: relative;
-    cursor: pointer;
     grid-template-columns: repeat(3, auto);
+    position: relative;
 }
 .cell{
     width: var(--cell-size);
     height: var(--cell-size);
     border: 2px solid black;
-    display: flex;
     margin-top: 2px;
     margin-left: 2px;
+    display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    cursor: pointer;
+    border-radius: 5%;
+    border-color: rgb(248, 1, 108);
 }
+/* End of Main Board */
 
+/* Remove cells particular borders */
 .cell:first-child, .cell:nth-child(2), .cell:nth-child(3){
     border-top: none;
 }
@@ -51,101 +63,136 @@ h1{
 .cell:nth-child(3n+1){
     border-left: none;
 }
-.cell:nth-child(3n+3){
+.cell:nth-child(3n + 3){
     border-right: none;
 }
+/* End of Remove cells particular borders */
+
 .cell.x,
 .cell.o{
     cursor: not-allowed;
 }
-.cell.x::before,
-.cell.x::after{
-    background: black;
-}
-.cell.o::before{
-    background: black;
-}
-.cell.o::after{
-    background: lightblue;
-}
 
+/* Board Hover*/
 .board.x .cell:not(.x):not(.o):hover::before,
 .board.x .cell:not(.x):not(.o):hover::after,
 .board.o .cell:not(.x):not(.o):hover::before{
     background: lightgreen;
 }
+/* End of  Board Hover */
+
+/* For X Class */
+.cell.x::before,
+.cell.x::after
+{
+    background: rgb(182, 3, 3);
+}
 
 .cell.x::before,
 .cell.x::after,
-.board.x .cell:not(.x):not(.o):hover:after,
-.board.x .cell:not(.x):not(.o):hover:before{
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after{
     content: "";
-    position: absolute;
-    width: calc(var(--mark-size) * 0.15);
+    width: calc(var(--mark-size) * .15);
     height: var(--mark-size);
+    position: absolute;
+    border-radius: 50%;
+    
 }
 
 .cell.x::before,
 .board.x .cell:not(.x):not(.o):hover::before{
     transform: rotate(45deg);
 }
+
 .cell.x::after,
 .board.x .cell:not(.x):not(.o):hover::after{
     transform: rotate(-45deg);
 }
+/* End of X Class */
 
-.cell.o::before,
+/* For O Class */
+.cell.o::before{
+    background: white;
+}
 .cell.o::after,
-.board.o .cell:not(.x):not(.o):hover::before,
 .board.o .cell:not(.x):not(.o):hover::after{
-    content: "";
-    position: absolute;
-    border-radius: 50%;
+    background: lightblue;
 }
 .cell.o::before,
 .board.o .cell:not(.x):not(.o):hover::before{
-   width: var(--mark-size);
-   height: var(--mark-size); 
+    content: "";
+    width: var(--mark-size);
+    height: var(--mark-size);
+    border-radius: 50%;
+    position: absolute;
+
 }
 .cell.o::after,
 .board.o .cell:not(.x):not(.o):hover::after{
+    content: "";
     width: calc(var(--mark-size) * .8);
     height: calc(var(--mark-size) * .8);
-    background: lightblue;
+    border-radius: 50%;
+    position: absolute;
 }
+/* End Of O class */
 
+/* Winning Message Container*/
 .winning-message{
     display: none;
     position: fixed;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: rgba(6, 6, 6, 0.798);
-    color: white;
+    top: 0; bottom: 0; left: 0; right: 0;
     justify-content: center;
     align-items: center;
-    font-size: 5rem;
+    background-color: rgba(0, 0, 0, 0.866);
     flex-direction: column;
 }
-.winning-message > button{
-    font-size: 3rem;
-    background: white;
-    border: 1px solid black;
-    padding: 10px 20px;
-}
-button:hover{
-    background: black;
+.winning-msg-txt{
+    font-size: 5rem;
     color: white;
-    border-color: white;
 }
-.winning-message.show{
-    display: flex;
+/* Restart Button */
+#restart{
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 3rem;
+    color: white;
+    border-bottom: 2px solid orangered;
+    border-top: 2px solid orangered;
+    border-radius: 20px;
+    background: transparent;
+    transition: .5s;
 }
+
+#restart:hover{
+    color: orangered;
+    background: black;
+    transform: scale(.8);
+    transition: .5s;
+}
+/* End of Restart button */
+/* Winning Message Container */
+
+/* For Mobile Indicator */
 .forMobile{
     display: none;
+    padding: 10px;
+    margin: 5px 0 0 5px;
+    font-weight: 600;
+    color: rgb(238, 236, 236);
+    background: orangered;
+    border-radius: 50%;
+    transition: .5s;
 }
 @media only screen and (max-width:768px){
     .forMobile{
-        font-weight: 600;
-        display: block;
-        padding: 10px;
+        display:inline-block;
+    }
+    .winning-msg-txt{
+        font-size: 3rem;
+    }
+    #restart{
+        background: black;
     }
 }
